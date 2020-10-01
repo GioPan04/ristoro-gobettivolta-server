@@ -17,7 +17,12 @@ router.get('/', (req, res) => {
 });
 
 router.get('/menu', async (req, res) => {
-    let data = await Food.find({avaibleCount: {$gt: 0}});
+    let data;
+    if(req.query.q) {
+        data = await Food.find({avaibleCount: {$gt: 0}, name: {$regex: `${req.query.q}`, $options: 'i'}});
+    } else {
+        data = await Food.find({avaibleCount: {$gt: 0}});
+    }
     let menu = Array.from(data.map((e) => {
         return {
             id: e._id,
