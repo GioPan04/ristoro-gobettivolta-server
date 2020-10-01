@@ -79,4 +79,37 @@ router.post('/order', async (req, res) => {
     res.status(201).json({foods, ammount});
 });
 
+router.get('/class', async (req, res) => {
+    let classs = await Class.find();
+    let classObj = Array.from(classs.map((e) => {
+        return {
+            id: e._id,
+            name: e.name,
+        };
+    }));
+    res.json({classObj});
+});
+
+router.get('/class/:id', async (req, res) => {
+    if(!req.params.id) {
+        res.status(400).json({error: 'Bed request'});
+        return;
+    }
+    let classs = await Class.findById(req.params.id).populate('orders');
+    if(!classs) {
+        res.status(404).json({error: "Classe non trovata"});
+        return;
+    }
+    let orders = classs.orders;
+    let ammount = 0;
+    for(var order of orders) {
+        ammount+=order.price;
+    }
+    res.json({
+        orders,
+        ammount,
+    });
+});
+
+
 export default router;
