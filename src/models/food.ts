@@ -10,5 +10,5 @@ export const FoodSchema = new mongoose.Schema({
   price: {type:Number, required: true},
 });
 
-const Food = mongoose.model<IFood>('User', FoodSchema);
+const Food = mongoose.model<IFood>('Food', FoodSchema);
 export default Food;
